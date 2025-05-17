@@ -3,11 +3,19 @@ from utils import generate_content
 
 st.set_page_config(page_title="AI Content Creator", layout="centered")
 
-# CSS styling
+# Initialize session variables
+if "ideas" not in st.session_state:
+    st.session_state.ideas = []
+if "selected_index" not in st.session_state:
+    st.session_state.selected_index = 0
+if "last_topic" not in st.session_state:
+    st.session_state.last_topic = ""
+
+# --- CSS Styling ---
 st.markdown("""
     <style>
     .stApp {
-        background-color: #222222;
+        background-color: #333333;
     }       
     .result-box {
         background-color: #f9f9f9;
@@ -35,19 +43,25 @@ st.markdown("""
 st.title("🎥 AI Content Creator Assistant")
 st.subheader("Generate ideas, scripts, hashtags, and SEO keywords using GPT")
 
-# Input and generation
+# --- Input ---
 topic = st.text_input("Enter a topic or keyword")
-if st.button("Generate Content") and topic:
+
+# --- Generate Logic ---
+generate_clicked = st.button("Generate Content")
+
+if (generate_clicked and topic) or (topic and topic != st.session_state.last_topic):
     with st.spinner("Generating content..."):
         try:
             content_list = generate_content(topic)
-            st.session_state["ideas"] = content_list
-            st.session_state["selected_index"] = 0
+            st.session_state.ideas = content_list
+            st.session_state.selected_index = 0
+            st.session_state.last_topic = topic
         except Exception as e:
-            st.error(f"Error: {e}")
-            st.session_state["ideas"] = []
-            st.session_state["selected_index"] = None
+            st.session_state.ideas = []
+            st.session_state.selected_index = None
+            st.error(f"Error while generating content:\n\n{e}")
 
+# --- Display Section ---
 ideas = st.session_state.get("ideas", [])
 
 if ideas:
@@ -70,7 +84,7 @@ if ideas:
 
     st.markdown("### 📈 SEO Keywords")
     st.write(", ".join(selected.get("seo_keywords", [])))
-    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 else:
     st.markdown("""
@@ -78,3 +92,4 @@ else:
             Please enter a topic and click <strong>'Generate Content'</strong> to see results here.
         </div>
     """, unsafe_allow_html=True)
+
