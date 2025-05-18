@@ -8,6 +8,7 @@ st.markdown("""
     <style>
     .stApp {
         background-color: #222222;
+        color: white;
     }       
     .result-box {
         background-color: #f9f9f9;
@@ -15,6 +16,7 @@ st.markdown("""
         padding: 16px;
         margin-bottom: 12px;
         box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        color: black;
     }
     hr.custom-line {
         border: none;
@@ -35,12 +37,13 @@ st.markdown("""
 st.title("🎥 AI Content Creator Assistant")
 st.subheader("Generate ideas, scripts, hashtags, and SEO keywords using GPT")
 
-# Input and generation
+groq_api_key = st.secrets["GROQ_API_KEY"]
+
 topic = st.text_input("Enter a topic or keyword")
 if st.button("Generate Content") and topic:
     with st.spinner("Generating content..."):
         try:
-            content_list = generate_content(topic)
+            content_list = generate_content(topic, groq_api_key)
             st.session_state["ideas"] = content_list
             st.session_state["selected_index"] = 0
         except Exception as e:
@@ -78,3 +81,4 @@ else:
             Please enter a topic and click <strong>'Generate Content'</strong> to see results here.
         </div>
     """, unsafe_allow_html=True)
+
