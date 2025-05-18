@@ -78,4 +78,3 @@ else:
             Please enter a topic and click <strong>'Generate Content'</strong> to see results here.
         </div>
     """, unsafe_allow_html=True)
-
