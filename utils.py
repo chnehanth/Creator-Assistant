@@ -1,14 +1,10 @@
-# utils.py
 import json
-from groq import Groq
-import os
-from dotenv import load_dotenv
 import re
+from groq import Groq
 
-load_dotenv()
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+def generate_content(topic, groq_api_key):
+    client = Groq(api_key=groq_api_key)
 
-def generate_content(topic):
     prompt = f"""
     You are an AI assistant for content creators. Given the topic: "{topic}", provide:
     3 content ideas, each including:
@@ -42,6 +38,7 @@ def generate_content(topic):
     try:
         return json.loads(content)
     except json.JSONDecodeError:
+        # Try to extract JSON array if extra text exists
         json_text_match = re.search(r'\[.*\]', content, re.DOTALL)
         if json_text_match:
             try:
