@@ -1,2 +1,2 @@
 # Creator-Assistant
-https://creator-assistant-bk9zbgzfcgcvrxlzawpsep.streamlit.app/
+(https://creator-assistant-ekobbsthvtjemcscyivgbz.streamlit.app/)
